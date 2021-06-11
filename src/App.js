@@ -1,60 +1,57 @@
-import './App.css';
-import React, {useEffect, useState} from "react";
-import axios from 'axios';
+import React, {useState} from "react";
+import styles from './App.module.css';
+import TAbleData from "./Components/TableData/TableData";
+import Button from 'react-bootstrap/Button'
+import NewDataForm from "./Components/NewDataForm/NewDataForm";
+import {Container} from "react-bootstrap";
+import {connect, Provider} from "react-redux";
+import {fetchData} from "./redux/reducers/appReducer";
+import store from "./redux/configureStore";
 
+class App extends React.Component {
+    state = {
+        isEdit: false,
+    }
+    componentDidMount() {
+        this.props.fetchData();
+    }
+    isEditForm = () => {
+        this.setState({
+            isEdit: !this.state.isEdit
+        })
+    }
+    render() {
+        if (!this.props.data) return <div>Preloader</div>
+        return (
+            <div className={styles.wrapper}>
+                <div className={styles.header}>
+                    <h1 className={styles.header}>CRUD App</h1>
+                </div>
+                <Container>
+                    <TAbleData data={this.props.data}/>
+                    <Button variant="primary" onClick={() => {
+                        this.isEditForm()
+                    }}>Add new Info</Button>
+                    {this.state.isEdit ? <NewDataForm isEditForm={this.isEditForm}/> : null}
+                </Container>
+            </div>
+        );
+    }
+}
 
-const ParseName = (props) => {
+const mapStateToProps = (state) => ({
+    data: state.app.appData
+});
+
+const AppContainer = connect(mapStateToProps, {fetchData})(App);
+
+const CRUDApp = (props) => {
     return (
-        <div>
-            {props.name}
-        </div>
+        <Provider store={store}>
+            <AppContainer/>
+        </Provider>
     )
 }
 
-const App = (props) => {
 
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios(
-                'http://178.128.196.163:3000/api/records',
-            );
-            setData(result.data);
-        };
-        fetchData();
-    }, []);
-
-
-    let parseArr = data.map(item => {
-        let key = Object.keys(item)[1];
-        let value = item[key];
-        console.log(value.name);
-        return (
-            <ParseName name={value.name}/>
-        )
-    })
-
-    // let items = data.map(item => {
-    //     return (
-    //         <tr key={item.id}>
-    //             <th scope="row">{item.data.id}</th>
-    //             <td>{item.data.id}</td>
-    //             <td>{item.data.name}</td>
-    //             <td>{item.data.age}</td>
-    //             <td>{item.data.email}</td>
-    //             <td>
-    //             </td>
-    //         </tr>
-    //     )
-    // })
-
-    return (
-        <div>
-            <h1>CRUD App</h1>
-            {parseArr}
-        </div>
-    );
-}
-
-export default App;
+export default CRUDApp;
