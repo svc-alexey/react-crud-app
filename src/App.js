@@ -32,7 +32,7 @@ class App extends React.Component {
                     <Button variant="primary" onClick={() => {
                         this.isEditForm()
                     }}>Add new Info</Button>
-                    {this.state.isEdit ? <NewDataForm isEditForm={this.isEditForm}/> : null}
+                    {this.state.isEdit ? <NewDataForm editForm={this.isEditForm}/> : null}
                 </Container>
             </div>
         );

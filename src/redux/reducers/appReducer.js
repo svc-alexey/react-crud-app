@@ -11,15 +11,16 @@ const appReducer = (state = initialState, action) => {
         case SET_DATA:
             let data = action.data;
             let result = data.filter(items => {
-                for (let name in items.data) {
-                    if (items.data.hasOwnProperty(name)){
-                        return items;
-                    }
+                if (items !== null && items.data) {
+                    return items;
                 }
             });
-            return {...state,
-                appData: [...result]}
-        default: return state;
+            return {
+                ...state,
+                appData: [...result]
+            }
+        default:
+            return state;
     }
 }
 
@@ -28,9 +29,30 @@ const setData = (data) => ({
     data
 });
 
+export const newPost = (data) => async (dispatch) => {
+    let response = await crudApi.postNewData(data);
+    if (response !== null) {
+        dispatch(fetchData());
+    }
+}
+
 export const fetchData = () => async (dispatch) => {
     let data = await crudApi.getData();
     dispatch(setData(data));
+}
+
+export const deleteData = (id) => async (dispatch) => {
+    let response = await crudApi.deleteData(id);
+    if (response !== null) {
+        dispatch(fetchData());
+    }
+}
+export const chagneData = (data, id) => async (dispatch) => {
+    debugger;
+    let response = await crudApi.updateData(data, id);
+    if (response !== null) {
+        dispatch(fetchData());
+    }
 }
 
 export default appReducer;

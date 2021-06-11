@@ -1,29 +1,54 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./TableData.module.css";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import {useDispatch} from "react-redux";
+import {deleteData} from "../../redux/reducers/appReducer";
+import NewDataForm from "../NewDataForm/NewDataForm";
 
+const Cell = (props) => {
+    const dispatch = useDispatch();
+    const [editForm, setEditForm] = useState(false);
+
+    let closeForm = () => {
+        setEditForm(false);
+    }
+
+    let delData = (id) => {
+        dispatch(deleteData(id));
+    }
+
+    return (
+        <tr id={props.id}>
+            <td>{props.index + 1}</td>
+            <td>{props.name}</td>
+            <td>{props.age}</td>
+            <td>{props.email}</td>
+            <td>
+                <div className={styles.btns}>
+                    <Button variant="danger" onClick={() => {
+                        delData(props.id)
+                    }}>Delete</Button>
+                    {" "}
+                    <Button variant="warning" onClick={() => {
+                        setEditForm(!editForm);
+                    }}>Edit</Button>
+                </div>
+            </td>
+            {editForm ? <NewDataForm name={props.name} age={props.age} email={props.email} editForm={closeForm} id={props.id}/> : null}
+        </tr>
+    )
+}
 const TAbleData = (props) => {
-    console.log(props.data);
+
     let data = props.data;
     let getTable = data.map((item, index) => {
         let key = Object.keys(item)[1];
         let value = item[key];
-        if (value.name || value.age || value.email ) {
+        if (value.name || value.age || value.email) {
             return (
-                <tr key={item._id}>
-                    <td>{index + 1}</td>
-                    <td>{value.name}</td>
-                    <td>{value.age}</td>
-                    <td>{value.email}</td>
-                    <td>
-                        <div className={styles.btns}>
-                            <Button variant="danger">Delete</Button>
-                            {" "}
-                            <Button variant="warning">Edit</Button>
-                        </div>
-                    </td>
-                </tr>)
+                <Cell id={item._id} index={index} name={value.name} age={value.age} email={value.email} key={item._id}/>
+            )
         }
         return null;
     })
