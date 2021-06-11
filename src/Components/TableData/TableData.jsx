@@ -56,7 +56,7 @@ const TAbleData = (props) => {
         <Container className="App">
             <Row>
                 <Col>
-                    <Table responsive hover variant="dark">
+                    <Table responsive hover variant="secondary">
                         <thead>
                         <tr>
                             <th>ID</th>

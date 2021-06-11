@@ -1,6 +1,18 @@
 .wrapper{
     z-index: 1;
+    background-color: black;
+    height: 100vh;
+    position: relative;
 }
 .header{
-    /*background-color: aqua;*/
+    background-color:#6c757d;
+    color: white;
+}
+.footer{
+    background-color:#6c757d;
+    color: white;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
 }

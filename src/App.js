@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import styles from './App.module.css';
 import TAbleData from "./Components/TableData/TableData";
 import Button from 'react-bootstrap/Button'
@@ -12,20 +12,25 @@ class App extends React.Component {
     state = {
         isEdit: false,
     }
+
     componentDidMount() {
         this.props.fetchData();
     }
+
     isEditForm = () => {
         this.setState({
             isEdit: !this.state.isEdit
         })
     }
+
     render() {
         if (!this.props.data) return <div>Preloader</div>
         return (
             <div className={styles.wrapper}>
                 <div className={styles.header}>
-                    <h1 className={styles.header}>CRUD App</h1>
+                    <Container>
+                        <h1 className={styles.header}>CRUD App</h1>
+                    </Container>
                 </div>
                 <Container>
                     <TAbleData data={this.props.data}/>
@@ -34,6 +39,11 @@ class App extends React.Component {
                     }}>Add new Info</Button>
                     {this.state.isEdit ? <NewDataForm editForm={this.isEditForm}/> : null}
                 </Container>
+                <div className={styles.footer}>
+                    <Container>
+                        <div className={styles.header}>Alexey Shvecov</div>
+                    </Container>
+                </div>
             </div>
         );
     }
