@@ -10,7 +10,8 @@ const appReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_DATA:
             let data = action.data;
-            let result = data.filter(items => items.data !== undefined)
+            let result = data.filter(items => items.data !== undefined && !items.data.data && items.data.name !== "");
+            console.log(result);
             return {
                 ...state,
                 appData: [...result]
